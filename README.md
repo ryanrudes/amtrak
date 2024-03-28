@@ -1,1 +1,1 @@
-This unofficial Python API for Amtrak is currently a **work in progress**. See the dev branch for the latest updates.
+This unofficial Python API for Amtrak is currently a **work in progress**.
