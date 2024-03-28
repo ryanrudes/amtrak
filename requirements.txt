@@ -1,4 +1,7 @@
+pycryptodome
 pydantic
 requests
 selenium
+pytest
+pytz
 bs4

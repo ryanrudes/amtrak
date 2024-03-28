@@ -1,3 +1,4 @@
+from amtrak.enums.discount import Discount
 from enum import Enum
 
 class AgeGroup(Enum):
@@ -15,3 +16,22 @@ class AgeGroup(Enum):
     YOUTH = "Youth"
     CHILD = "Child"
     INFANT = "Infant"
+    
+    @property
+    def default_discount(self) -> Discount:
+        """Get the default discount for the age group.
+        
+        Returns:
+            Discount: The default discount for the age group.
+        """
+        match self:
+            case AgeGroup.ADULT:
+                return Discount.ADULT
+            case AgeGroup.SENIOR:
+                return Discount.SENIOR
+            case AgeGroup.YOUTH:
+                return Discount.YOUTH
+            case AgeGroup.CHILD:
+                return Discount.CHILD
+            case AgeGroup.INFANT:
+                return Discount.INFANT

@@ -6,6 +6,7 @@ from pydantic import BaseModel, model_validator
 
 from typing import Optional
 from datetime import date
+from warnings import warn
 
 class Query(BaseModel):
     # Specify the origin and destination stations
@@ -30,6 +31,9 @@ class Query(BaseModel):
     
     @model_validator(mode = "after")
     def check_query(self):
+        # TODO: Implement assistance/disability support
+        assert not self.needs_assistance, "assistance/disability support is not yet implemented"
+        
         # Validate travelers
         specified_passenger_counts = self.adults + self.seniors + self.youth + self.children + self.infants > 0
         specified_travelers = self.travelers is not None
@@ -85,6 +89,12 @@ class Query(BaseModel):
             
             self.travelers = travelers
         
+        # TODO: Support discounted travel
+        # Warn about non-default discounts
+        for traveler in self.travelers:
+            if traveler.discount != traveler.age.default_discount:
+                warn("Discounted travel is not yet supported")
+
         self.travelers = Travelers(travelers = self.travelers)
             
         return self

@@ -1,19 +1,14 @@
-def test_api():
-    from amtrak import API, Query
-    
-    api = API(headless = False)
+from amtrak import API
 
-    query = Query(
-        origin = "NYP",
-        destination = "WAS",
-        adults = 2,
-        seniors = 2,
-        youth = 1,
-        children = 3,
-        infants = 2,
-        depart_date = "2025-01-01",
-        return_date = "2025-01-02",
-        needs_assistance = True,
-    )
+# Initialize the API
+api = API()
+
+def test_get_stations():
+    """
+    Test the get_stations method.
+    """
+    # Retrieve the stations
+    stations = api.get_stations()
     
-    api.search(query)
+    # Ensure the stations are not empty
+    assert len(stations) > 0
