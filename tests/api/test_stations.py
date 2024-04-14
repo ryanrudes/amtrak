@@ -1,6 +1,6 @@
 from amtrak.api.endpoints.stations import get_stations
 from amtrak.api.crypto import get_crypto_initializers
-from amtrak.validators import Feature
+from amtrak import Station
 from amtrak.enums import StationType
 
 from unittest.mock import Mock, patch
@@ -103,7 +103,7 @@ with patch("requests.get") as mock_get, patch("amtrak.api.crypto.parse") as mock
         out = get_stations(crypto_parse = mock_parse, fetch = mock_get)
         
         expected_output = [
-            Feature(
+            Station(
                 object_id = 1,
                 longitude = -121.816,
                 latitude = 38.018,
@@ -126,7 +126,7 @@ with patch("requests.get") as mock_get, patch("amtrak.api.crypto.parse") as mock
                 station_aliases = ["Station One"],
                 station_rank = None,
             ),
-            Feature(
+            Station(
                 object_id = 1,
                 longitude = 21.816,
                 latitude = -38.018,

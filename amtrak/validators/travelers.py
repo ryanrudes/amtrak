@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 from amtrak.validators.traveler import Traveler
 from amtrak.enums import AgeGroup
@@ -7,7 +7,7 @@ from amtrak.enums import AgeGroup
 class Travelers(BaseModel):
     travelers: list[Traveler]
     
-    @validator("travelers")
+    @field_validator("travelers")
     def perform_checks(cls, travelers):
         # Get the number of adult, child, and infant passengers
         adult_passengers = 0

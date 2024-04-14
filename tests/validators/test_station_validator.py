@@ -1,9 +1,9 @@
 from utils import ensure_success, ensure_failure
 
-from amtrak.validators.station import Station
+from amtrak.validators.station_code import StationCode
 from pydantic import TypeAdapter
 
-ta = TypeAdapter(Station)
+ta = TypeAdapter(StationCode)
 
 def test_validator():
     ensure_success("ABC", ta)

@@ -1,4 +1,4 @@
-from amtrak.validators.feature import Feature
+from amtrak.objects.station import Station
 
 def test_feature():
     payload = {
@@ -25,5 +25,5 @@ def test_feature():
         "StationRank": "",
     }
     
-    feature = Feature(**payload)
+    feature = Station(**payload)
     print(feature.station_rank)

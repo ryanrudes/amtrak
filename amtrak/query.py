@@ -1,5 +1,5 @@
 from amtrak.validators.utils import validate_passenger_counts
-from amtrak.validators import Station, Traveler, Travelers, PromoCode, CouponCode
+from amtrak.validators import StationCode, Traveler, Travelers, PromoCode, CouponCode
 from amtrak.enums import AgeGroup, Discount
 
 from pydantic import BaseModel, model_validator
@@ -10,8 +10,8 @@ from warnings import warn
 
 class Query(BaseModel):
     # Specify the origin and destination stations
-    origin: Station
-    destination: Station
+    origin: StationCode
+    destination: StationCode
     # Specify the number of passengers by age group
     adults: int = 0
     seniors: int = 0

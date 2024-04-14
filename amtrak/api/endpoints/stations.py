@@ -1,9 +1,9 @@
-from amtrak.validators.feature import Feature
+from amtrak.objects.station import Station
 from amtrak.api.crypto import parse
 
 import requests
 
-def get_stations(crypto_parse = parse, fetch = requests.get) -> [Feature]:
+def get_stations(crypto_parse = parse, fetch = requests.get) -> [Station]:
     endpoint = "https://maps.amtrak.com/services/MapDataService/stations/trainStations"
     response = fetch(endpoint)
 
@@ -13,7 +13,7 @@ def get_stations(crypto_parse = parse, fetch = requests.get) -> [Feature]:
     
     for feature in stations["StationsDataResponse"]["features"]:
         properties = feature["properties"]
-        feature = Feature(**properties)
+        feature = Station(**properties)
         features.append(feature)
         
     return features

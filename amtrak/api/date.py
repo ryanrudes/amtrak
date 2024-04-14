@@ -64,7 +64,7 @@ def parse_date(date: str, tz: str = "America/New_York") -> Optional[str]:
     """
     if not date:
         return None
-
+    
     dt = datetime.strptime(date, "%m/%d/%Y %H:%M:%S")
     dt = pytz.timezone(tz).localize(dt)
     return dt.isoformat()

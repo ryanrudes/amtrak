@@ -80,8 +80,15 @@ def parse(data: str, *, fetch: Callable = requests.get) -> Optional[dict]:
     
     # The actual data is encrypted with the private key. The result is always
     # JSON (for our purposes), so go ahead and parse that.
-    plaintext = decrypt(cipher_text, private_key, fetch = fetch).rstrip('\x02')
-
+    # TODO: figure out why random padding is added to the end of the JSON
+    plaintext = decrypt(cipher_text, private_key, fetch = fetch)
+    # TODO: figure out why random padding is added to the end of the JSON.
+    #       this is a quick workaround
+    plaintext = plaintext[:plaintext.rindex('}') + 1]
+    
+    with open("plaintext.json", "w") as f:
+        f.write(plaintext)
+        
     try:
         return json.loads(plaintext)
     except json.JSONDecodeError:

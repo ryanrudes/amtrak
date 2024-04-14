@@ -1,4 +1,4 @@
-from amtrak.api.endpoints.date import (
+from amtrak.api.date import (
     get_timezone_from_character,
     parse_date,
 )

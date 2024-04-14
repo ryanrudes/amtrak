@@ -1,9 +1,15 @@
-from pydantic import BaseModel, Field, AliasChoices, validator
+from pydantic import BaseModel, Field, AliasChoices, field_validator
+from typing_extensions import Annotated
 
 from amtrak.enums import StationType
 
 from typing import Optional, Union
 from datetime import datetime
+
+from amtrak.types import (
+    Latitude,
+    Longitude,
+)
 
 # TODO: Figure out whether we should move this file to a more approperiate directory
 
@@ -14,16 +20,18 @@ from datetime import datetime
 #
 #  This will make the code more readable and easier to understand.
 #  The downside is that it will make the code more verbose.
-class Feature(BaseModel):
+class Station(BaseModel):
     object_id: int = Field(validation_alias = AliasChoices("object_id", "OBJECTID"))
-    longitude: float = Field(ge = -180, le = 180, validation_alias = AliasChoices("longitude", "lon"))
-    latitude: float = Field(ge = -90, le = 90, validation_alias = AliasChoices("latitude", "lat"))
+    
+    longitude: Annotated[Longitude, Field(validation_alias = AliasChoices("longitude", "lon"))]
+    latitude: Annotated[Latitude, Field(validation_alias = AliasChoices("latitude", "lat"))]
+    
     is_train_station: bool = Field(validation_alias = AliasChoices("is_train_station", "IsTrainSt"))
     zoom: int = Field(validation_alias = AliasChoices("zoom", "MapZmLvl"))
     gx_id: str = Field(min_length = 3, max_length = 3, pattern = r"^[A-Z]{3}$")
     date_modified: datetime = Field(validation_alias = AliasChoices("date_modified", "DateModif"))
     station_type: StationType = Field(validation_alias = AliasChoices("station_type", "StaType"))
-    zip_code: str = Field(pattern = r"^\d{5}$|[A-Z]\d[A-Z]\s\d[A-Z]\d$", validation_alias = AliasChoices("zip_code", "Zipcode"))
+    zip_code: str = Field(pattern = r"^\d{5}|[A-Z]\d[A-Z]\s\d[A-Z]\d$", validation_alias = AliasChoices("zip_code", "Zipcode"))
     state: str = Field(min_length = 2, max_length = 2, pattern = "^[A-Z]{2}$", validation_alias = AliasChoices("state", "State"))
     city: str = Field(validation_alias = AliasChoices("city", "City"))
     address1: str = Field(validation_alias = AliasChoices("address1", "Address1"))
@@ -47,19 +55,19 @@ class Feature(BaseModel):
         """Alias for latitude"""
         return self.latitude
     
-    @validator("name", "station_facility_name")
+    @field_validator("name", "station_facility_name")
     def empty_string_to_none(cls, v: Union[str, Optional[str]]) -> Optional[str]:
         if v == '' or v is None:
             return None
         return v
 
-    @validator("station_rank", pre=True)
+    @field_validator("station_rank", mode = "before")
     def empty_int_to_none(cls, v: Union[str, Optional[int]]) -> Optional[int]:
         if v is None or v == '':
             return None
         return int(v)
 
-    @validator("created_at", "updated_at", pre=True)
+    @field_validator("created_at", "updated_at", mode = "before")
     def parse_datetime(cls, dt: Union[str, datetime]) -> datetime:
         if isinstance(dt, datetime):
             return dt
@@ -68,7 +76,7 @@ class Feature(BaseModel):
         else:
             raise TypeError("datetime st be a string or datetime object")
     
-    @validator("station_aliases", pre=True)
+    @field_validator("station_aliases", mode = "before")
     def split_comma_separated(cls, v: Union[str, list[str]]) -> list[str]:
         if isinstance(v, list):
             return v

@@ -7,4 +7,4 @@ def check_code(code: str) -> str:
     assert code.isupper(), "station codes must be uppercase"
     return code
     
-Station = Annotated[str, AfterValidator(check_code)]
+StationCode = Annotated[str, AfterValidator(check_code)]
