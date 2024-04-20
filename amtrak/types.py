@@ -120,8 +120,12 @@ ObjectID = Annotated[PositiveInt,
 ]
 
 # Event
+# TODO: This is written really poorly
 def parse_event(dt: str) -> datetime:
-    return datetime.strptime(dt, "%m/%d/%Y %I:%M:%S %p")
+    try:
+        return datetime.strptime(dt, "%m/%d/%Y %I:%M:%S %p")
+    except:
+        return datetime.strptime(dt, "%m/%d/%Y %H:%M:%S")
         
 Event = Annotated[datetime,
     BeforeValidator(parse_event),
@@ -132,6 +136,7 @@ Event = Annotated[datetime,
     )
 ]
 
+# TODO: Most implementations of this aren't actually localized yet
 LocalizedEvent = Annotated[datetime,
     BeforeValidator(parse_event),
     Field(
