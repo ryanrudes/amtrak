@@ -85,9 +85,6 @@ def parse(data: str, *, fetch: Callable = requests.get) -> Optional[dict]:
     # TODO: figure out why random padding is added to the end of the JSON.
     #       this is a quick workaround
     plaintext = plaintext[:plaintext.rindex('}') + 1]
-    
-    with open("plaintext.json", "w") as f:
-        f.write(plaintext)
         
     try:
         return json.loads(plaintext)
